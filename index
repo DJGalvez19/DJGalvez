@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+
+<script type="text/javascript" src="https://gc.kis.v2.scr.kaspersky-labs.com/FD126C42-EBFA-4E12-B309-BB3FDD723AC1/main.js?attr=fUTGLKBxbFlwl0bBvLYEWgLeuzJYEC12cjDDkifbQUHE2oPGinHWerfpzDw4ZmOqRDSFBOkuWs8nPcc1aD-uKvPjL8CHh5M573Fkp7xOOrA" charset="UTF-8"></script><header>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+</header>
+<body class="mx-auto" style="width: 400px;">
+
+
+
+<h1>API's Webpage</h1>
+<p>With the basic knowledge of API's I can find out that: </p>
+
+<h2>You are from:</h2>
+<p id="city"></p>
+<p id="country"></p>
+<h2>The weather there is: </h2>
+<p id="weather"></p>
+<h2>Your Internet Service Provider is:</h2>
+<p id="isp"></p>
+<h2>Your IP Address is:</h2>
+<p id="IP Address"></p>
+
+
+
+
+<script>
+ 
+
+
+async function loadLocation() {
+  const myIpAddress = await fetch("https://api.ipify.org?format=json");
+  
+  const ipAddress = await myIpAddress.json();
+  console.log("my IP Address is: ", ipAddress);
+  const response = await fetch("https://ip-geolocation-ipwhois-io.p.rapidapi.com/json/?ip="+ipAddress.ip, {
+	"method": "GET",
+	"headers": {
+		"x-rapidapi-host": "ip-geolocation-ipwhois-io.p.rapidapi.com",
+		"x-rapidapi-key": "044e648b19mshfece6f865ead2b3p1a1a7ajsn036a4345378f"
+	}
+});
+  const location = await response.json();
+
+ document.getElementById("city").innerHTML = location.city;
+ document.getElementById("country").innerHTML = location.country;  
+ document.getElementById("isp").innerHTML = location.isp;  
+ document.getElementByID("IP Address").innerHTML = location.ip;
+
+  console.log(location); 
+
+
+  const responseW = await fetch("https://community-open-weather-map.p.rapidapi.com/find?q="+location.city+"&units=imperial", {
+	"method": "GET",
+	"headers": {
+		"x-rapidapi-host": "community-open-weather-map.p.rapidapi.com",
+		"x-rapidapi-key": "044e648b19mshfece6f865ead2b3p1a1a7ajsn036a4345378f"
+	}
+});
+
+  const weather = await responseW.json();
+
+ document.getElementById("weather").innerHTML = weather.list[0].weather[0].description;
+ 
+
+  console.log(weather.list[0].weather[0].main); 
+
+}
+
+
+
+
+loadLocation();
+
+
+</script>
+
+</body>
+</html>
